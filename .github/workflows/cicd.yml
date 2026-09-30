@@ -19,6 +19,7 @@ jobs:
       CI_CD_PASSWORD: ${{ secrets.CI_CD_PASSWORD }}
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -29,12 +30,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Check pytest
+        run: |
+          python -m pytest --version
 
       - name: Run tests
         run: |
-          pytest
+          python -m pytest
+
 
   docker:
     name: Build Docker Image
@@ -42,9 +48,10 @@ jobs:
     needs: test
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build Docker image
         run: |
-          docker build -t simple-fastapi-app .
+          docker build -t fastapi_cicd:v1 .
